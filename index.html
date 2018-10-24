@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="js/lib/three.js" ></script>
+		
+		<script type="text/javascript" src="js/jam3D.js" ></script>
+		<title>jam3D</title>
+		<style>
+			*{
+				margin: 0px;
+				padding: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<script>
+			const SCREEN_WIDTH = window.innerWidth,SCREEN_HEIGHT=window.innerHeight;
+			var renderer=new THREE.WebGLRenderer({antialias:true}),
+				camera=new THREE.PerspectiveCamera(75,SCREEN_WIDTH/SCREEN_HEIGHT,1,5000),
+				scene=new THREE.Scene();
+			renderer.setSize(SCREEN_WIDTH,SCREEN_HEIGHT);
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setClearColor("#000");
+			document.body.appendChild(renderer.domElement);
+			camera.position.set(500,500,0);
+			camera.lookAt(scene.position);
+			
+			//jam3D
+			var jam3D = new Jam3D(scene,camera,renderer);
+			jam3D.setRatio(1);
+			
+			createTerrain();
+			createCube();
+			animate();
+			
+			function animate(){
+				requestAnimationFrame(animate);
+				jam3D.animate();
+				renderer.render(scene,camera);
+			}
+			function createTerrain(){
+				var terrain = new THREE.Mesh(
+					new THREE.PlaneGeometry(1000,1000,5,5),
+					new THREE.MeshBasicMaterial({color:"blue"})
+				);
+				terrain.rotateX(-Math.PI/2);
+				scene.add(terrain);
+				//init
+				jam3D.initObject(terrain,{
+					canRotate:false
+				});
+				jam3D.addTouchIdForTerrain(terrain,0);
+			}
+			function createCube(){
+				//create
+				var cube=new THREE.Mesh(
+					new THREE.CubeGeometry(200,200,200,5,5,5),
+					new THREE.MeshBasicMaterial({color:"red"})
+				);
+				cube.position.y=100;
+				scene.add(cube);
+				//init
+				jam3D.initObject(cube);
+				jam3D.addTouchIdForArticle(cube,0);
+			}
+		</script>
+	</body>
+</html>

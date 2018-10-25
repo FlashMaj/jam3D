@@ -15,6 +15,7 @@
 		</style>
 	</head>
 	<body>
+		<p class="test" style="position: fixed;right: 0px;bottom: 0px;display: block;text-align: center;font-size: 20px;width: 200px;height: 300px;background-color: black;color: white;">点击事件测试</p>
 		<script>
 			const SCREEN_WIDTH = window.innerWidth,SCREEN_HEIGHT=window.innerHeight;
 			var renderer=new THREE.WebGLRenderer({antialias:true}),
@@ -54,6 +55,7 @@
 				jam3D.addTouchIdForTerrain(terrain,0);
 			}
 			function createCube(){
+				var testDom = document.getElementsByClassName("test")[0];
 				//create
 				var cube=new THREE.Mesh(
 					new THREE.CubeGeometry(200,200,200,5,5,5),
@@ -64,6 +66,16 @@
 				//init
 				jam3D.initObject(cube);
 				jam3D.addTouchIdForArticle(cube,0);
+				//添加事件
+				cube.jam3d_attribute.onClick=function(intersects,e){
+					testDom.innerHTML="单击事件\n"+"x:"+intersects[0].point.x+"\n"+"y:"+intersects[0].point.y+"\n"+"z:"+intersects[0].point.z+"\n";
+				};
+				cube.jam3d_attribute.onTouchUp=function(e){
+					testDom.innerHTML="松开事件";
+				}
+				cube.jam3d_attribute.onTouchDown=function(intersects,e){
+					testDom.innerHTML="按下事件\n"+"x:"+intersects[0].point.x+"\n"+"y:"+intersects[0].point.y+"\n"+"z:"+intersects[0].point.z+"\n";
+				};
 			}
 		</script>
 	</body>
